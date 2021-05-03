@@ -2,6 +2,7 @@ package test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -147,39 +148,64 @@ public class Laptops {
 		s.selectByVisibleText("Price (High > Low)");
 		
 		
-//		List<WebElement> price=driver.findElements(By.xpath("//p[@class='price']"));
-//		for(int k=1;k<price.size()+1;k++) {
-//			//String prices=driver.findElement(By.xpath("(//p[@class='price'])["+k+"]")).getText();
-//			String prices=driver.findElement(By.xpath("(//p[@class='price'])["+k+"]")).getText();
-//			prices=prices.substring(1, 9);
-//			System.out.println(prices);
-//		}
-		
-		
+
 		//Verify prices are in decreasing order
 		
 		List<WebElement> mobprice=driver.findElements(By.xpath("//p[@class='price']"));
-		//List<WebElement> price=driver.findElements(By.xpath("//span[@class='price-tax']/preceding::p[@class='price']"));
+		ArrayList<String> prices= new ArrayList<String>();	
 		
-		ArrayList prices= new ArrayList();
-		
+		for(WebElement e:mobprice) {			 
+			prices.add(e.getText());			
+		}	
 		for(int l=0;l<mobprice.size();l++) {
-		for(WebElement e:mobprice) {
-			
-			prices.add(e.getText());
 			String S=(String) prices.get(l);
 			//System.out.println(prices.get(l));
 			String m[]=S.split("E");
 			//System.out.println(m[0].substring(1).replace(",", ""));
 			 S=m[0].substring(1).replace(",", "");
-			//prices.set(l, m[0].substring(1).replace(",", ""));	
-			System.out.println(S);
-			break;
-			}		
+			// Integer.parseInt(S);
+			prices.set(l, S.trim());
+			
+		}
+		System.out.println(prices);
+		ArrayList<Double> resultList = getIntegerArray(prices);
+		System.out.println(resultList);
+		
+		
+		List<Double> sortedPrices = new ArrayList<Double>(resultList);
+		
+		// sort the list
+		Collections.sort(sortedPrices);	
+		Collections.reverse(sortedPrices);
+		System.out.println(sortedPrices);
+		// true if the prices are sorted
+		System.out.println(sortedPrices.equals(resultList));
+	
+	}
+		
+		
+		static ArrayList<Double> getIntegerArray(ArrayList<String> prices) {
+	        ArrayList<Double> result = new ArrayList<Double>();
+	        for(String stringValue : prices) {
+	            try {
+	                //Convert String to Integer, and store it into integer array list.
+	            Double d=	Double.parseDouble(stringValue);
+	            				
+	                result.add(d);
+	            } catch(NumberFormatException nfe) {
+	               System.out.println("Could not parse " + nfe);
+	                
+	            } 
+	        }       
+	        return result;
+	    }
+	
+			
+		
 					
-		}	
+	
 		
 	}
 
-}
+
 
